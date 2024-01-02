@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
 export const Form = () => {
   const [users, setUsers] = useState([]);
   const [names, setNames] = useState([]);
   const [emails, setEmails] = useState([]);
+
+  const navigate = useNavigate();
 
   //GETの処理
   useEffect(() => {
@@ -28,27 +32,10 @@ export const Form = () => {
           email: emails,
         });
       } catch (err) {
-        console.log("Front Error!!", err);
+        console.log("POST Front Error!!", err);
       }
     };
     userPost();
-    setNames("");
-    setEmails("");
-  };
-
-  //PUDATEの処理
-  const updateBtn = async (id) => {
-    const updateUser = async () => {
-      try {
-        await axios.patch(`http://localhost:3000/update/${id}`, {
-          name: names,
-          email: emails,
-        });
-      } catch (err) {
-        console.log("Front Error!!", err);
-      }
-    };
-    updateUser();
     setNames("");
     setEmails("");
     window.location.reload();
@@ -65,6 +52,12 @@ export const Form = () => {
       .catch((err) => {
         console.log(err);
       });
+    window.location.reload();
+  };
+
+  //更新ページへ遷移
+  const updatecleateBtn = (id) => {
+    navigate(`/update/${id}`);
     window.location.reload();
   };
 
@@ -85,7 +78,7 @@ export const Form = () => {
               <p>{`ID:${user.id}`}</p>
               <p>{`名前:${user.name}、メール:${user.email}`}</p>
               <button onClick={() => deleteUser(user.id)}>削除</button>
-              <button onClick={() => updateBtn(user.id)}>更新</button>
+              <button onClick={() => updatecleateBtn(user.id)}>更新</button>
             </li>
           ))}
         </ul>
